@@ -67,7 +67,7 @@
                                 <th>Descrição</th>
                                 <th>Material</th>
                                 <th>Quantidade</th>
-                                <th>Preço Unitario</th>
+                                <th>Preço Unitário</th>
                                 <th>Preço Total</th>
 
                             </tr>
@@ -89,8 +89,8 @@
                                     <td>$descricao</td>
                                     <td>$material</td>
                                     <td>$quantidade</td>
-                                    <td>$valorUnitario R$</td>
-                                    <td>$valorTotal R$</td>
+                                    <td>R$ $valorUnitario </td>
+                                    <td>R$ $valorTotal </td>
 
                                 </tr>";													
                         }

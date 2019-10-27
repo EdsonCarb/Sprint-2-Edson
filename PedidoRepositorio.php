@@ -13,6 +13,30 @@
              $pedido->getPendente());  
             $stmt->execute();                 
         }
+        public function buscar10($pagina):Array{
+            $provider = new MySqliProvider();
+            $limite=10;
+            $pagina = $pagina*$limite;        
+            $mysqli= $provider->provide();            
+            $stmt = $mysqli->prepare("SELECT id, pedidoLinha, dataEntrega, dataEmissao, IdCliente, 
+             pendente FROM pedido LIMIT $pagina,$limite");   
+            $stmt->execute();   
+            $r = $stmt->bind_result($id, $pedidoLinha, $dataEntrega, $dataEmissao, $idCliente, 
+                                    $pendente);    
+            $result= array();   
+            while ($stmt->fetch())
+            {
+                $c = new Pedido();
+                $c->setId($id);
+                $c->setLinhaPedido($pedidoLinha);
+                $c->setDataEntrega($dataEntrega);
+                $c->setDataEmissão($dataEmissao);
+                $c->setIdCliente($idCliente);  
+                $c->setPendente($pendente);                 
+                $result[] = $c;
+            }    
+            return $result;
+        }
         public function buscarTodos():Array{
             $provider = new MySqliProvider();        
             $mysqli= $provider->provide();            

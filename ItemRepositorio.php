@@ -10,11 +10,31 @@
             $stmt->bind_param('ss', $item->getNome(),$item->getMaterial());  
             $stmt->execute();                 
         }
+        public function buscar10($pagina):Array{
+            $provider = new MySqliProvider();
+            $limite=10;
+            $pagina = $pagina*$limite;
+            $mysqli= $provider->provide();           
+            $stmt = $mysqli->prepare("SELECT nome, material, id FROM item LIMIT $pagina,$limite");   
+            $stmt->execute(); 
+            $r = $stmt->bind_result($nome, $material, $id); 
+            $result= array();   
+            while ($stmt->fetch())
+            {
+                $l = new Item();
+                $l->setNome($nome);
+                $l->setMaterial($material);
+                $l->setId($id);            
+                $result[] = $l;
+            }    
+            return $result;
+        }
+        
 
         public function buscarTodos():Array{
             $provider = new MySqliProvider();      
             $mysqli= $provider->provide();           
-            $stmt = $mysqli->prepare('SELECT nome, material, id FROM item;');   
+            $stmt = $mysqli->prepare('SELECT nome, material, id FROM item');   
             $stmt->execute(); 
             $r = $stmt->bind_result($nome, $material, $id); 
             $result= array();   

@@ -9,7 +9,7 @@
         $item->setNome($nomeItem);
         $item->setMaterial($materialItem);
         $itemRepositorio ->postItem($item);
-        echo "<script>alert('Dados enviados com sucesso!');location.href = 'GestaoComercialView.php';</script>";
+        echo "<script>alert('Dados enviados com sucesso!');location.href = 'CadastroItemView.php';</script>";
     }else{
         header('location:index.php');
     };

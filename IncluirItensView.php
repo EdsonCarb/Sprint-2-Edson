@@ -18,6 +18,11 @@
                     $itemRepositorio = new ItemRepositorio();
                     $pedidoRepositorio = new PedidoRepositorio();
                     $clienteRepositorio = new ClienteRepositorio();
+                    $pagina=0;
+                    if(isset($_POST['pagina'])){
+                        $pagina=$_POST['pagina'];
+                        $pagina = intval($pagina);
+                    };
                     $pedido = $pedidoRepositorio->buscarPorId($idPedido);
                     $dataEmisao = $pedido->getDataEmisao();
                     $dataEntrega = $pedido->getDataEntrega();
@@ -26,7 +31,8 @@
                     $id = $pedido->getId();
                     $cliente= $clienteRepositorio->buscarPorId($idCliente);
                     $nomeCliente= $cliente->getNome();
-                    $itens = $itemRepositorio->buscarTodos(); 
+                    $totalDeItens = $itemRepositorio->buscarTodos();
+                    $itens = $itemRepositorio->buscar10($pagina);
                     $html=" <div class='card'>
                     <div class='card-body'>
                     <h5 class='card-title'>Incluir Itens</h5>
@@ -92,10 +98,31 @@
 
                                 </tr>";													
                         }
+                        $numeroItens=0;
+                        foreach ($totalDeItens as $totalDeItens) {
+                            $numeroItens++;
+                        }
+                        $numeroItens= $numeroItens/10;
+                        $numeroPagina=1;
+                        $html.= "</tbody>
+                            </table>
+                            <nav aria-label='Page navigation example'>
+                            <ul class='pagination justify-content-center'>";
+                        while($numeroItens>0){
+                            $teste = $numeroPagina-1;
+                                $html.= 
+                                    "<li class='page-item'>
+                                    <form method='post' action='IncluirItensView.php'>
+                                    <input  type='hidden' name='id_Pedido' value='$id'>
+                                    <input  type='hidden' name='pagina' value='$teste'>
+                                    <input class='page-link'  type='submit' value='$numeroPagina'>
+                                    </form>";
+                                $numeroPagina++;
+                                $numeroItens--;    
+                        }
                     
-                    $html.= "</tbody>
-                    </table><a href='GestaoProducaoView.php' class='btn btn-secondary ' role='button' aria-pressed='true'>Voltar</a></div></div>";
-                    echo $html;
+                        $html.= " </ul></nav><a href='GestaoProducaoView.php' class='btn btn-secondary ' role='button' aria-pressed='true'>Voltar</a></div></div>";
+                        echo $html;
                     }
                 } 
             }else{

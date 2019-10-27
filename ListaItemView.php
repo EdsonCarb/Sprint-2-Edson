@@ -11,7 +11,13 @@
             require_once('ItemRepositorio.php');
             if ($_SESSION['autenticado']){ 
                 $itemRepositorio = new ItemRepositorio();
-                $itens = $itemRepositorio->buscarTodos(); 
+                $pagina=0;
+                if(isset($_GET['pagina'])){
+                    $pagina=$_GET['pagina'];
+                    $pagina = intval($pagina);
+                };
+                $totalDeItens = $itemRepositorio->buscarTodos();
+                $itens = $itemRepositorio->buscar10($pagina); 
                 $html=" <div class='card'>
                 <div class='card-body'>
                 <h5 class='card-title'>Lista de Itens Cadastrados</h5>
@@ -41,9 +47,26 @@
 
                             </tr>";													
 					}
-                
+               
+                $numeroItens=0;
+                foreach ($totalDeItens as $totalDeItens) {
+                    $numeroItens++;
+                }
+                $numeroItens= $numeroItens/10;
+                $numeroPagina=1;
                 $html.= "</tbody>
-                </table><a href='GestaoProducaoView.php' class='btn btn-secondary ' role='button' aria-pressed='true'>Voltar</a></div></div>";
+                </table>
+                <nav aria-label='Page navigation example'>
+                <ul class='pagination justify-content-center'>";
+                while($numeroItens>0){
+                $teste = $numeroPagina-1;
+                    $html.= 
+                        "<li class='page-item'><a class='page-link' href='ListaItemView.php?pagina=$teste;'>$numeroPagina</a></li>";
+                
+                    $numeroPagina++;
+                    $numeroItens--;    
+                }
+                $html.= "</ul></nav>  <a href='GestaoProducaoView.php' class='btn btn-secondary ' role='button' aria-pressed='true'>Voltar</a></div></div>";
                 echo $html;
                 }
                 
@@ -67,4 +90,5 @@
         <script src='https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js' integrity='sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49' crossorigin='anonymous'></script>
         <script src='https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js' integrity='sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy' crossorigin='anonymous'></script>
     </body>
+    
 </html>

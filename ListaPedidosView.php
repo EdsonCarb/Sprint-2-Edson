@@ -18,7 +18,13 @@
                 $pedidoRepositorio = new PedidoRepositorio();
                 $clienteRepositorio = new ClienteRepositorio();
                 $cliente = new Cliente;
-                $pedidos = $pedidoRepositorio->buscarTodos(); 
+                $pagina=0;
+                if(isset($_GET['pagina'])){
+                    $pagina=$_GET['pagina'];
+                    $pagina = intval($pagina);
+                };
+                $totalPedidos = $pedidoRepositorio->buscarTodos(); 
+                $pedidos = $pedidoRepositorio->buscar10($pagina); 
                 $html=" <div class='card'>
                 <div class='card-body'>
                 <h5 class='card-title'>Lista de Pedidos</h5>
@@ -27,7 +33,7 @@
                     <thead>
                         <tr>
                             <th>Id Cliente</th>
-                            <th>Numero do Pedido</th>
+                            <th>Número do Pedido</th>
                             <th>Data de Emissão</th>
                             <th>Data de Entrega</th>
                             <th>Status</th>
@@ -81,12 +87,31 @@
                         </tr>"
                              
                         ;													
-					}
+                    }
+                    
+                    $numeroPedidos=0;
+                    foreach ($totalPedidos as $totalPedidos) {
+                        $numeroPedidos++;
+                    }
+                    $numeroPedidos= $numeroPedidos/10;
+                    $numeroPagina=1;
+                    $html.= "</tbody>
+                    </table>
+                    <nav aria-label='Page navigation example'>
+                    <ul class='pagination justify-content-center'>";
+                    while($numeroPedidos>0){
+                    $teste = $numeroPagina-1;
+                        $html.= 
+                            "<li class='page-item'><a class='page-link' href='ListaPedidosView.php?pagina=$teste;'>$numeroPagina</a></li>";
+                    
+                        $numeroPagina++;
+                        $numeroPedidos--;    
+                    }
+                    $html.= "</ul></nav>  <a href='GestaoComercialView.php' class='btn btn-secondary ' role='button' aria-pressed='true'>Voltar</a></div></div>";
+                    echo $html;
+                    }
                 
-                $html.= "</tbody>
-                </table><a href='GestaoComercialView.php' class='btn btn-secondary ' role='button' aria-pressed='true'>Voltar</a></div></div>";
-                echo $html;
-                }
+                
                 
             }else{
                 header('location:index.php');
