@@ -9,8 +9,13 @@
             require_once('MenuView.php');
             require_once('ItemClass.php');
             require_once('ItemRepositorio.php');
+            require_once('IncluirItemRepositorio.php');
+            require_once("OrdemRepositorio.php");
+
             if ($_SESSION['autenticado']){ 
                 $itemRepositorio = new ItemRepositorio();
+                $incluirItemRepositorio = new IncluirItensRepositorio();
+                $ordemRepositorio = new OrdemRepositorio(); 
                 $pagina=0;
                 if(isset($_GET['pagina'])){
                     $pagina=$_GET['pagina'];
@@ -20,7 +25,7 @@
                 $itens = $itemRepositorio->buscar10($pagina); 
                 $html=" <div class='card'>
                 <div class='card-body'>
-                <h5 class='card-title'>Lista de Itens Cadastrados</h5>
+                <h5 class='card-title'>Relatório de Estoque Analítico</h5>
                 <input class='form-control' id='myInput' type='text' placeholder='Procurar..'>
                 <table class='table table-bordered table-striped'>
                     <thead>
@@ -28,6 +33,10 @@
                             <th>Código </th>
                             <th>Descrição</th>
                             <th>Material</th>
+                            <th>Estoque</th>
+                            <th> Pedido </th>
+                            <th>Produzindo</th>
+                            <th>#</th>
 
                         </tr>
                     </thead>
@@ -38,12 +47,29 @@
                         $descricao = $itens->getNome();
                         $codigo = $itens->getId();
                         $material = $itens->getMaterial();
+                        $estoque = $itens->getQuantidade();
+                        $pedido = $incluirItemRepositorio->totalPedido($codigo);
+                        $produzindo=$ordemRepositorio->totalOrdemPendente($codigo);
+                        if($pedido ==0){
+                            $pedido =0;
+                        }
+                        if($produzindo ==0){
+                            $produzindo =0;
+                        }
                         $html.="
                             <tr>
                                 <td>$codigo</td>
                                 <td>$descricao</td>
                                 <td>$material</td>
-                                
+                                <td>$estoque</td>
+                                <td>$pedido</td>
+                                <td>$produzindo</td>
+                                <td>
+                                    <form method='post' action='EmissaoOrdemView.php'>
+                                        <input  type='hidden' name='cod_Item' value='$codigo'>
+                                        <input class='btn btn-outline-dark'  type='submit' value='Emitir Ordem de Produção'>
+                                    </form>
+                                </td>
 
                             </tr>";													
 					}
@@ -61,12 +87,12 @@
                 while($numeroItens>0){
                 $teste = $numeroPagina-1;
                     $html.= 
-                        "<li class='page-item'><a class='page-link' href='ListaItemView.php?pagina=$teste;'>$numeroPagina</a></li>";
+                        "<li class='page-item'><a class='page-link' href='RelatorioAnaliticoView.php?pagina=$teste;'>$numeroPagina</a></li>";
                 
                     $numeroPagina++;
                     $numeroItens--;    
                 }
-                $html.= "</ul></nav>  <a href='GestaoProducaoView.php' class='btn btn-secondary ' role='button' aria-pressed='true'>Voltar</a></div></div>";
+                $html.= "</ul></nav>  <a href='GestaoEstoqueView.php' class='btn btn-secondary ' role='button' aria-pressed='true'>Voltar</a></div></div>";
                 echo $html;
                 }
                 

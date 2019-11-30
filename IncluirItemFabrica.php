@@ -13,7 +13,8 @@
         $itemParaIncluir->setQuantidade($quantidade);
         $itemParaIncluir-> setValorUnitario($valorUnitario);
         $incluirRepositorio ->postItemPedido($itemParaIncluir); 
-        echo "<script>decisao=confirm('Item incluido! Deseja incluir mais itens?')</script><script>
+        echo "<script>
+            decisao=confirm('Item incluido! Deseja incluir mais itens?')</script><script>
             if (decisao) {
                 location.href = 'IncluirItensView.php?idPedido=$idPedido';;
             } else {

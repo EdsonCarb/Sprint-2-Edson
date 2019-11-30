@@ -2,7 +2,6 @@
     require_once("PedidoClass.php");
     require_once("ConexaoBanco.php");
     class PedidoRepositorio{
-
         public function postPedido(Pedido $pedido){       
             $provider = new MySqliProvider();
             $mysqli = $provider->provide();     
@@ -11,7 +10,8 @@
             $stmt->bind_param('ssssss', $pedido->getId(), $pedido->getLinhaPedido(), 
             $pedido->getDataEntrega(), $pedido->getDataEmisao(), $pedido->getIdCliente(), 
              $pedido->getPendente());  
-            $stmt->execute();                 
+            $stmt->execute();
+                         
         }
         public function buscar10($pagina):Array{
             $provider = new MySqliProvider();

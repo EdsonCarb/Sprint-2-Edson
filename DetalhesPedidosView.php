@@ -89,14 +89,14 @@
                                     <td>$descricao</td>
                                     <td>$material</td>
                                     <td>$quantidade</td>
-                                    <td>R$ $valorUnitario </td>
-                                    <td>R$ $valorTotal </td>
+                                    <td> R$ $valorUnitario </td>
+                                    <td> R$ $valorTotal </td>
 
                                 </tr>";													
                         }
                     
                     $html.= "
-                    <td></td><td></td><td></td><td></td><td></td><td><h5>Total: $total R$</h5></td>
+                    <td></td><td></td><td></td><td></td><td></td><td><h5>Total: R$ $total</h5></td>
                     </tbody>
                     </table><a href='GestaoProducaoView.php' class='btn btn-secondary ' role='button' aria-pressed='true'>Voltar</a></div></div>";
                     echo $html;
